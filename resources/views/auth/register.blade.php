@@ -40,6 +40,34 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="birth_year" class="col-md-4 col-form-label text-md-right">{{ __('Birth Year') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="birth_year" type="number" class="form-control @error('birth_year') is-invalid @enderror" name="birth_year" value="{{ old('birth_year') }}" required autocomplete="birth_year">
+
+                                @error('birth_year')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="birth_month" class="col-md-4 col-form-label text-md-right">{{ __('Birth Month') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="birth_month" type="number" class="form-control @error('birth_month') is-invalid @enderror" name="birth_month" value="{{ old('birth_month') }}" required autocomplete="birth_month">
+
+                                @error('birth_month')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

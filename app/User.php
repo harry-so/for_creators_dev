@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'birth_year', 'birth_month', 'user_desc',
     ];
 
     /**
@@ -41,7 +42,27 @@ class User extends Authenticatable
         return $this->hasMany('App\Item');
     }
 
+    public function bid() {
+        return $this->hasMany('App\Bid');
+    }
+
     public function fav_items() {
         return $this->belongsToMany('App\Item');
     }
+
+}
+
+class User extends Model
+{
+    public function item() {
+        return $this->hasMany('App\Item');
+    }
+
+    public function bid() {
+        return $this->hasMany('App\Bid');
+    }
+
+    public function fav_items() {
+        return $this->belongsToMany('App\Item');
+}
 }

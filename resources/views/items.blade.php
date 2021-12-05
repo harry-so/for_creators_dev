@@ -3,51 +3,12 @@
 @section('content')
 <!-- Bootstrapの定形コード… -->
 <div class="card-body">
-    <div class="card-title">
-        アイテム登録
-    </div>
-    <!-- バリデーションエラーの表示に使用-->
-    @include('common.errors')
-    <!-- ログインしたユーザーしか投稿できない -->
-    @if(Auth::check())
-    <!-- 本登録フォーム -->
-    <form action="{{ url('items') }}" method="POST" class="form-horizontal">
+    <form action="{{ url('sell') }}" method="GET">
         {{ csrf_field() }}
-        <!-- 本のタイトル -->
-        <div class="form-group">
-            <div class="card-title">
-                アイテム名
-            </div>
-            <div class="col-sm-6">
-                <input type="text" name="item_name" class="form-control">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="card-title">
-                最低価格
-            </div>
-            <div class="col-sm-6">
-                <input type="number" name="min_price" class="form-control">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="card-title">
-                紹介
-            </div>
-            <div class="col-sm-6">
-                <input type="textbox" name="item_desc" class="form-control">
-            </div>
-        </div>
-        <!-- アイテム 登録ボタン -->
-        <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-6">
-                <button type="submit" class="btn btn-primary">
-                    出品
-                </button>
-            </div>
-        </div>
+        <button type="submit" class="btn btn-danger">
+            出品へ
+        </button>
     </form>
-    @endif
     <!-- 現在の本 -->
     @if (count($items) > 0)
     <div class="card-body">
@@ -59,15 +20,12 @@
                     <th>&nbsp;</th>
                 </thead>
                 <!-- テーブル本体 -->
-                <tbody?>
+                <tbody>
                     <tr>
                         <th>アイテム名</th>
                         <th>出品者</th>
                         <th>最低価格</th>
                         <th>商品紹介</th>
-                        <th>Delete</th>
-                        <th>Update</th>
-                        <th>Fav</th>
                     </tr>
                 </tbody>  
                 @foreach ($items as $item)
@@ -89,32 +47,42 @@
                         <td class="table-text">
                             <div>{{ $item->item_desc }}</div>
                         </td>
-                        <!-- 本: 削除ボタン -->
                         <td>
-                            <form action="{{ url('item/'.$item->id) }}" method="POST">
+                            <form action="{{ url('item/'.$item->id) }}" method="GET">
                                 {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-danger">
-                                    削除
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="{{ url('itemsedit/'.$item->id) }}" method="GET"> {{ csrf_field() }}
                                 <button type="submit" class="btn btn-primary">
-                                    更新
+                                    詳細
                                 </button>
                             </form>
                         </td>
-                        
-                        <td>
+                        <!-- 本: 削除ボタン -->
                         @if(Auth::check())
-	                        @if(Auth::id() != $item->user_id && $item->fav_user()->where('user_id',Auth::id())->exists() !== true)
-                            <form action="{{ url('item/fav/'.$item->id) }}" method="POST"> {{ csrf_field() }}
-                                <button type="submit" class="btn btn-primary">
-                                    お気に入り
-                                </button>
-                            </form>
+                            @if(Auth::id() == $item->user_id)
+                            <td>
+                                <form action="{{ url('itemdelete/'.$item->id) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <button type="submit" class="btn btn-danger">
+                                        削除
+                                    </button>
+                                </form>
+                            </td>
+                            
+                            <td>
+                                <form action="{{ url('itemsedit/'.$item->id) }}" method="GET"> {{ csrf_field() }}
+                                    <button type="submit" class="btn btn-primary">
+                                        更新
+                                    </button>
+                                </form>
+                            </td>
+                            @endif
+                            @if(Auth::id() != $item->user_id && $item->fav_user()->where('user_id',Auth::id())->exists() !== true)
+                            <td>
+                                <form action="{{ url('item/fav/'.$item->id) }}" method="POST"> {{ csrf_field() }}
+                                    <button type="submit" class="btn btn-primary">
+                                        FAV
+                                    </button>
+                                </form>
                             @endif
                         @endif
                         </td>
@@ -138,6 +106,11 @@
                         <th>お気に入り一覧</th>
                         <th>&nbsp;</th>
                     </thead>
+                    <tr>
+                        <th>アイテム名</th>
+                        <th>商品紹介</th>
+                        <th>出品者</th>
+                    </tr>
                     <!-- テーブル本体 -->
                     <tbody>
                         @foreach ($fav_items as $fav_item)
@@ -163,4 +136,9 @@
     @endif
 
 @endif
+<div class="row">
+	<div class="col-md-4 offset-md-4">
+		{{ $items->links()}}
+    </div>
+</div>
 @endsection
