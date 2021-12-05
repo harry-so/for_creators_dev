@@ -11,7 +11,7 @@
                 <label for="item_name">最低価格</label>
                 <input type="text" name="min_price" class="form-control" value="{{$item->min_price}}">
                 <label for="item_name">アイテム紹介</label>
-                <input type="text" name="min_price" class="form-control" value="{{$item->item_desc}}">
+                <input type="text" name="item_desc" class="form-control" value="{{$item->item_desc}}">
             </div>
             <!--/ item_name -->
             <!-- Save ボタン/Back ボタン -->

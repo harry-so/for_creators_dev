@@ -16,7 +16,7 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        $items = Item::get();
+        $items = Item::orderBy('created_at', 'desc')->paginate(5);
         
         if(Auth::check()) {
             $fav_items = Auth::user()->fav_items()->get();
@@ -26,7 +26,7 @@ class ItemsController extends Controller
             ]);
         }else{
             return view('items', [
-                'posts' => $posts,
+                'items' => $items,
             ]);
         }
     }
@@ -72,15 +72,21 @@ class ItemsController extends Controller
         return redirect('/');
     }
 
+    public function sell() {
+        return view ('sell');
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+
+    //  商品ページ
+    public function show(Item $item)
     {
-        //
+        return view('itemdetail',['item'=>$item]);
     }
 
     /**
